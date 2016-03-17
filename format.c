@@ -485,6 +485,7 @@ struct format_tree *
 format_create(struct cmd_q *cmdq, int flags)
 {
 	struct format_tree	*ft;
+	struct cmd		*cmd;
 
 	if (!event_initialized(&format_job_event)) {
 		evtimer_set(&format_job_event, format_job_timer, NULL);
@@ -504,8 +505,8 @@ format_create(struct cmd_q *cmdq, int flags)
 	if (cmdq != NULL && cmdq->cmd != NULL)
 		format_add(ft, "command_name", "%s", cmdq->cmd->entry->name);
 	if (cmdq != NULL && cmdq->parent != NULL) {
-		format_add(ft, "command_hooked", "%s",
-		    cmdq->parent->cmd->entry->name);
+		cmd = cmdq->parent->cmd;
+		format_add(ft, "command_hooked", "%s", cmd->entry->name);
 	}
 
 	return (ft);
